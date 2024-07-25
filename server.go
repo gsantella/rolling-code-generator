@@ -8,6 +8,7 @@ import (
 	"math"
 	"math/big"
 	"net/http"
+	"os"
 	"rolling-code-generator/namesgenerator"
 	"strconv"
 	"time"
@@ -16,11 +17,12 @@ import (
 	"github.com/google/uuid"
 )
 
-// todo: customized update frequency
-//var updateTimeSeconds int = 5
-var randomInt int64
-var rollingCode string
-var key string
+var (
+	updateNumSeconds int = 5
+	secureRandomInt int64
+	rollingCode string
+	uuidServiceKey string
+)
 
 type Template struct {
     templates *template.Template
@@ -39,44 +41,57 @@ func main() {
 
 	e := echo.New()
 	e.Renderer = t
+	e.HideBanner = true
 
-	key = uuid.New().String()
+	uuidServiceKey = uuid.New().String()
 
+	// print custom banner
+	printCustomBanner()
+
+	// initial tick
+	tick()
+
+	// run background ticking task
 	go bgTask()
 
+	// routes 
 	e.GET("/", Hello)
 
 	e.GET("/test", func(c echo.Context) error {
-		output := "uuid: " + key + " rollingCode: " + rollingCode + " randomInt: " + strconv.FormatInt(randomInt, 10)
+		output := "uuid: " + uuidServiceKey + " rollingCode: " + rollingCode + " randomInt: " + strconv.FormatInt(secureRandomInt, 10)
 		return c.String(http.StatusOK, output)
 	})
 
 	e.Static("/", "static")
 
 	e.Logger.Fatal(e.Start(":1324"))
+
 }
 
 func Hello(c echo.Context) error {
 	data := struct{
-		Uuid string
+		UuidServiceKey string
 		RollingCode string
-		Key string
+		SecureRandomInt string
 	}{
-		Uuid: key,
+		UuidServiceKey: uuidServiceKey,
 		RollingCode: rollingCode,
-		Key: strconv.FormatInt(randomInt, 10),
+		SecureRandomInt: strconv.FormatInt(secureRandomInt, 10),
 	}
 	return c.Render(http.StatusOK, "hello", data)
 }
 
 
-func bgTask() {
-	ticker := time.NewTicker(5 * time.Second)
+func tick() {
+	secureRandomInt, _ = randint64()
+	rollingCode  = namesgenerator.GetRandomName(0)
+}
 
-	for t := range ticker.C {
-		randomInt, _ = randint64()
-		rollingCode  = namesgenerator.GetRandomName(0)
-		fmt.Println("Congrats ", rollingCode, " " , randomInt, " @ ", t)
+func bgTask() {
+	ticker := time.NewTicker(time.Duration(updateNumSeconds) * time.Second)
+
+	for range ticker.C {
+		tick()
 	}
 }
 
@@ -86,4 +101,25 @@ func randint64() (int64, error) {
 		return 0, err
 	}
 	return val.Int64(), nil
+}
+
+func printCustomBanner() {
+
+	fmt.Println("")
+	fmt.Println("██████╗  ██████╗ ██████╗ ")
+	fmt.Println("██╔══██╗██╔════╝██╔════╝ ")
+	fmt.Println("██████╔╝██║     ██║  ███╗")
+	fmt.Println("██╔══██╗██║     ██║   ██║")
+	fmt.Println("██║  ██║╚██████╗╚██████╔╝")
+	fmt.Println("╚═╝  ╚═╝ ╚═════╝ ╚═════╝ ")
+	fmt.Println("rolling-code-generator")
+	fmt.Println("⇨ version 0.1")
+	fmt.Println("⇨ service uuid " + uuidServiceKey)
+}
+
+func getEnv(key, defaultValue string) string {
+    if value, exists := os.LookupEnv(key); exists {
+        return value
+    }
+    return defaultValue
 }

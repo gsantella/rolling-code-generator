@@ -3,61 +3,40 @@
 <style>
 
 .info-box {
-  width: 400px;
+  width: 380px;
   padding: 8% 0 0;
   margin: auto;
 }
 .form {
+  color: white;
   position: relative;
   z-index: 1;
-  background: #FFFFFF;
-  max-width: 400px;
+  background: #202124;
+  max-width: 380px;
   margin: 0 auto 100px;
   padding: 45px;
   text-align: center;
-  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+  box-shadow: 0 0 5px 0 rgba(187, 134, 252, 0.8), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
 }
 .form input {
   font-family: sans-serif;
+  font-weight: bold;
   outline: 0;
-  background: #f2f2f2;
+  background: #202124;
   width: 100%;
-  border: 0;
+  border-bottom: 1px solid #bb86fc;
   margin: 0 0 15px;
   padding: 15px;
   box-sizing: border-box;
   font-size: 14px;
 }
-.form button {
-  font-family: sans-serif;
-  text-transform: uppercase;
-  outline: 0;
-  background: #4CAF50;
-  width: 100%;
-  border: 0;
-  padding: 15px;
-  color: #FFFFFF;
-  font-size: 14px;
-  -webkit-transition: all 0.3 ease;
-  transition: all 0.3 ease;
-  cursor: pointer;
-}
-.form .message {
-  margin: 15px 0 0;
-  color: #b3b3b3;
-  font-size: 12px;
-}
-.form .message a {
-  color: #4CAF50;
-  text-decoration: none;
-}
-.form .register-form {
-  display: none;
+.form span {
+  font-size: 0.5em;
+  color: gray;
 }
 
 body {
-  background: #6464c8; /* fallback for old browsers */
-  background: rgb(100, 100, 200);
+  background: #292929; /* fallback for old browsers */
 
   font-family: sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -69,9 +48,9 @@ body {
 <div class="info-box">
   <div class="form">
       <h1>rolling-code generator</h1>
-      <input type="text" value="{{.Uuid}}" disabled />
       <input type="text" value="{{.RollingCode}}" disabled />
-      <input type="text" value="{{.Key}}" disabled />
+      <input type="text" value="{{.SecureRandomInt}}" disabled />
+      <span>service uuid {{.UuidServiceKey}}</span>
   </div>
 </div>
 
