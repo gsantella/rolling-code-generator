@@ -1,0 +1,62 @@
+{{define "home"}}
+
+<!doctype html>
+<html>
+<head>
+<style>
+
+.info-box {
+  width: 50%; /*380px;*/
+  padding: 8% 0 0;
+  margin: auto;
+}
+.form {
+  color: white;
+  position: relative;
+  z-index: 1;
+  background: #202124;
+  margin: 0 auto 100px;
+  padding: 2.5rem;
+  box-shadow: 0 0 3px 0 rgba(187, 134, 252, 0.48), 0 3px 5px 0 rgba(0, 0, 0, 0.24);
+}
+.form input {
+  font-family: sans-serif;
+  font-weight: bold;
+  outline: 0;
+  background: #202124;
+  width: 100%;
+  border: 0;
+  border-bottom: 1px solid #bb86fc;
+  box-shadow: 0 0 3px 0 rgba(187, 134, 252, 0.28), 0 3px 5px 0 rgba(0, 0, 0, 0.14);
+  margin: 0 0 15px;
+  padding: 15px;
+  box-sizing: border-box;
+  font-size: 14px;
+}
+.form span {
+  font-size: 0.5em;
+  color: gray;
+}
+
+body {
+  background: #292929; /* fallback for old browsers */
+
+  font-family: sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;      
+}
+
+</style>
+</head>
+<body>
+<div class="info-box">
+  <div class="form">
+      <h1>rolling-code-generator</h1>
+      <input type="text" value="{{.RollingCode}}" disabled />
+      <input type="text" value="{{.SecureRandomInt}}" disabled />
+      <span>service uuid {{.UuidServiceKey}}</span>
+  </div>
+</div>
+</body>
+</html>
+{{end}}

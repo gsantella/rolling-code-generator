@@ -1,14 +1,9 @@
 package main
 
 import (
-	"crypto/rand"
-	"fmt"
 	"html/template"
 	"io"
-	"math"
-	"math/big"
 	"net/http"
-	"os"
 	"rolling-code-generator/namesgenerator"
 	"strconv"
 	"time"
@@ -43,24 +38,22 @@ func main() {
 	e.Renderer = t
 	e.HideBanner = true
 
+	// generate new UUID for service key
 	uuidServiceKey = uuid.New().String()
 
 	// print custom banner
 	printCustomBanner()
 
-	// initial tick
+	// initializing work
 	tick()
 
-	// run background ticking task
-	go bgTask()
+	// run continual work at specified interval
+	go tickRunner()
 
 	// routes 
-	e.GET("/", Hello)
+	e.GET("/", homeHandler)
 
-	e.GET("/test", func(c echo.Context) error {
-		output := "uuid: " + uuidServiceKey + " rollingCode: " + rollingCode + " randomInt: " + strconv.FormatInt(secureRandomInt, 10)
-		return c.String(http.StatusOK, output)
-	})
+	e.GET("/api", apiHandler)
 
 	e.Static("/", "static")
 
@@ -68,7 +61,7 @@ func main() {
 
 }
 
-func Hello(c echo.Context) error {
+func homeHandler(c echo.Context) error {
 	data := struct{
 		UuidServiceKey string
 		RollingCode string
@@ -78,48 +71,31 @@ func Hello(c echo.Context) error {
 		RollingCode: rollingCode,
 		SecureRandomInt: strconv.FormatInt(secureRandomInt, 10),
 	}
-	return c.Render(http.StatusOK, "hello", data)
+	return c.Render(http.StatusOK, "home", data)
 }
 
+func apiHandler(c echo.Context) error {
+	data := struct{
+		UuidServiceKey string
+		RollingCode string
+		SecureRandomInt string
+	}{
+		UuidServiceKey: uuidServiceKey,
+		RollingCode: rollingCode,
+		SecureRandomInt: strconv.FormatInt(secureRandomInt, 10),
+	}
+	return c.JSON(http.StatusOK, data)
+}
 
 func tick() {
-	secureRandomInt, _ = randint64()
+	secureRandomInt, _ = getSecureRandInt64()
 	rollingCode  = namesgenerator.GetRandomName(0)
 }
 
-func bgTask() {
+func tickRunner() {
 	ticker := time.NewTicker(time.Duration(updateNumSeconds) * time.Second)
 
 	for range ticker.C {
 		tick()
 	}
-}
-
-func randint64() (int64, error) {
-	val, err := rand.Int(rand.Reader, big.NewInt(int64(math.MaxInt64)))
-	if err != nil {
-		return 0, err
-	}
-	return val.Int64(), nil
-}
-
-func printCustomBanner() {
-
-	fmt.Println("")
-	fmt.Println("██████╗  ██████╗ ██████╗ ")
-	fmt.Println("██╔══██╗██╔════╝██╔════╝ ")
-	fmt.Println("██████╔╝██║     ██║  ███╗")
-	fmt.Println("██╔══██╗██║     ██║   ██║")
-	fmt.Println("██║  ██║╚██████╗╚██████╔╝")
-	fmt.Println("╚═╝  ╚═╝ ╚═════╝ ╚═════╝ ")
-	fmt.Println("rolling-code-generator")
-	fmt.Println("⇨ version 0.1")
-	fmt.Println("⇨ service uuid " + uuidServiceKey)
-}
-
-func getEnv(key, defaultValue string) string {
-    if value, exists := os.LookupEnv(key); exists {
-        return value
-    }
-    return defaultValue
 }
