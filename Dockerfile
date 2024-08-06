@@ -1,7 +1,7 @@
 FROM golang:1.21-alpine AS build
 
 # Set the GOPATH environment variable
-ENV GOPATH /go
+ENV GOPATH=/go
 
 # Create the workspace
 RUN mkdir -p $GOPATH/src $GOPATH/bin
