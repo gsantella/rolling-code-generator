@@ -6,3 +6,15 @@ With all of the AI deep fakes in the news, this project was initiated after hear
 
 - if you have suspicion of any meeting participants, you can ask them to relay over Teams/Zoom/Phone the rolling-code
 - at the start of a meeting, all present could respond to the others with the current rolling code to verify themselves
+
+# screenshot
+
+![image](https://github.com/user-attachments/assets/f409c898-d20c-46fb-bd18-2830b4988f00)
+
+# demo
+
+https://rolling-code-generator-app-kd8ka.ondigitalocean.app/
+
+# deploy via Docker
+
+```docker run -p 80:1423 ghcr.io/gsantella/rolling-code-generator:main```
