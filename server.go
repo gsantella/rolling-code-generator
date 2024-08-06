@@ -10,6 +10,7 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"github.com/google/uuid"
+	"go.uber.org/zap"
 )
 
 var (
@@ -30,8 +31,12 @@ func (t *Template) Render(w io.Writer, name string, data interface{}, c echo.Con
 
 func main() {
 
+	logger := zap.Must(zap.NewProduction())
+	defer logger.Sync()
+
 	t := &Template{
-		templates: template.Must(template.ParseGlob("public/views/*.html")),
+		templates: template.Must(template.ParseGlob("./public/views/*.html")),
+		//templates: template.Must(template.ParseGlob("/usr/local/bin/public/views/*.html")),
 	}
 
 	e := echo.New()
@@ -57,7 +62,12 @@ func main() {
 
 	e.Static("/", "static")
 
-	e.Logger.Fatal(e.Start(":1324"))
+	// commence logging
+	logger.Info("App starting")
+
+	e.Logger.Info(e.Start(":1324"))
+
+	// todo: graceful shutdown, but probably not needed
 
 }
 
