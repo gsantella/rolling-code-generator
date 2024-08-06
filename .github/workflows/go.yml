@@ -47,17 +47,8 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Docker build
-      id: docker
+    - name: Build and push
       uses: docker/build-push-action@v6
       with:
-        builder: ${{ steps.buildx.outputs.name }}
-        provenance: false
-        platforms: linux/amd64
-        push: ${{ github.event_name != 'pull_request' }}
-        tag: latest
-        labels: ${{ steps.meta.outputs.labels }}
-        tags: ${{ steps.meta.outputs.tags }}
-        cache-from: type=gha
-        cache-to: type=gha,mode=max
-
+        push: true
+        tags: user/app:latest
