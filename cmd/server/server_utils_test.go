@@ -7,7 +7,7 @@ import (
 
 func TestGenerateSecureRandInt64(t *testing.T) {
 
-	got, _ := generateSecureRandInt64()
+	got, _ := getSecureRandInt64()
 
 	if got > math.MaxInt64 {
 		t.Errorf("number out of range returned")
