@@ -16,7 +16,10 @@ COPY ./web $GOPATH/src/web
 # Set working directory
 WORKDIR $GOPATH/src
 
-# Tidy up and get dependencies
+# Update all dependencies
+RUN go get -u ./...
+
+# Add missing dependencies and remove unused ones
 RUN go mod tidy
 
 # Build the application
