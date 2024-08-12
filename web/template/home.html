@@ -1,8 +1,9 @@
 {{define "home"}}
 
 <!doctype html>
-<html>
+<html lang="en-US">
 <head>
+<title>rolling-code-generator</title>
 <style>
 
 .info-box {
@@ -52,8 +53,8 @@ body {
 <div class="info-box">
   <div class="form">
       <h1>rolling-code-generator</h1>
-      <input type="text" value="{{.RollingCode}}" disabled />
-      <input type="text" value="{{.SecureRandomInt}}" disabled />
+      <input type="text" value="{{.RollingCode}}" disabled>
+      <input type="text" value="{{.SecureRandomInt}}" disabled>
       <span>service uuid {{.UuidServiceKey}}</span>
   </div>
 </div>
