@@ -37,6 +37,10 @@ jobs:
       run: |
         go get .
 
+    - name: Tidy up dependencies
+      run: |
+        go mod tidy
+
     - name: Build
       run: go build -v ./...
 
