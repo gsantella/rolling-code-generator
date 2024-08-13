@@ -3,26 +3,24 @@ package namesgenerator
 import (
 	"strings"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestNameFormat(t *testing.T) {
 	name := GetRandomName(0)
-	if !strings.Contains(name, "_") {
-		t.Fatalf("Generated name does not contain an underscore")
-	}
-	if strings.ContainsAny(name, "0123456789") {
-		t.Fatalf("Generated name contains numbers!")
-	}
+
+	assert.True(t, strings.Contains(name, "_"), "Generated name does not contain an underscore")
+	assert.False(t, strings.ContainsAny(name, "0123456789"), "Generated name contains numbers")
+
 }
 
 func TestNameRetries(t *testing.T) {
 	name := GetRandomName(1)
-	if !strings.Contains(name, "_") {
-		t.Fatalf("Generated name does not contain an underscore")
-	}
-	if !strings.ContainsAny(name, "0123456789") {
-		t.Fatalf("Generated name doesn't contain a number")
-	}
+
+	assert.True(t, strings.Contains(name, "_"), "Generated name does not contain an underscore")
+	assert.True(t, strings.ContainsAny(name, "0123456789"), "Generated name doesn't contain a number")
+	
 }
 
 func BenchmarkGetRandomName(b *testing.B) {
