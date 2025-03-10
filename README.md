@@ -12,10 +12,6 @@ With all of the AI deep fakes in the news, this project was initiated after hear
 
 ![image](https://github.com/user-attachments/assets/f409c898-d20c-46fb-bd18-2830b4988f00)
 
-# demo
-
-https://rolling-code-generator-app-kd8ka.ondigitalocean.app/
-
 # deploy via Docker
 
-```docker run -p 80:1423 ghcr.io/gsantella/rolling-code-generator:main```
+```docker run -p 80:1324 ghcr.io/gsantella/rolling-code-generator:main```
